@@ -9,7 +9,7 @@
 #
 .data
 	displayAddress:	.word	0x10008000
-	PlatformCurrent:  .word   0x10008F84, 0x10008738, 0x10008448  #Platform cords
+	PlatformCurrent:  .word   0x10008D04, 0x10008898, 0x10008548  #Platform cords
 	DoddleLocation: .word 	  0x10008524
 .text
 	lw $t0, displayAddress	# $t0 stores the base address for display
@@ -23,6 +23,7 @@
 	add $t5 $t4 36
 	lw $t9 0xffff0000 	#get keystroke input
 	beq $t9, 1, GetKeyPressed	#make sure a key was clicked'
+	
 InitialStart:
 	lw $t0, displayAddress
 	
@@ -50,7 +51,7 @@ InitialStart:
 	jal DrawDoodle
 	
 	li $t8 0
-	jal BounceUp
+	jal BounceDown
 	
 	j InitialStart
 
@@ -66,7 +67,7 @@ MovePlatforms:
 	jal DrawScreen
 	
 	add $sp $sp -4
-	add $t3 $t3 512
+	add $t3 $t3 1024
 	sw $t3 ($sp) #Pushing Doodle
 	add $sp $sp -4
 	sw $s4 ($sp) #Pushing colour
@@ -74,25 +75,36 @@ MovePlatforms:
 	
 	
 	lw $t4 ($t7)
-	add $t4 $t4 512
+	add $t4 $t4 1024
 	
 	jal CheckBellow #Cheeck below, if yes update its location
 	
 	sw $t4 ($t7)
+	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
 	jal DrawPlatform
 
+
 	lw $t4 4($t7)
-	add $t4 $t4 512
+	add $t4 $t4 1024
+	
+	jal CheckBellow #Cheeck below, if yes update its location
+	
+	
 	sw $t4 4($t7)
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
 	jal DrawPlatform
 	
+	
 	lw $t4 8($t7)
-	add $t4 $t4 512
+	add $t4 $t4 1024
+	
+	jal CheckBellow #Cheeck below, if yes update its location
+	
+	
 	sw $t4 8($t7)
 	add $t5 $t4 36
 	add $sp $sp -4
@@ -108,7 +120,7 @@ CheckBellow:
 	jr $ra
 	
 ResetPlatform:
-	sub $t4 $t4 4096
+	sub $t4 $t4 3072
 	sw $t4 0($sp)	#Pushing location
 	jr $ra
 
