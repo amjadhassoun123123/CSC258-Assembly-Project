@@ -55,8 +55,7 @@ InitialStart:
 	j InitialStart
 	
 BounceUp:
-	lw $t9 0xffff0000 	#get keystroke input
-	beq $t9, 1, GetKeyPressed	#make sure a key was clicked'
+	jal VerifyPress
 	beq $t8 10 BounceDown
 	lw $t0, displayAddress
 
@@ -101,8 +100,7 @@ BounceUp:
 	
 
 BounceDown:
-	lw $t9 0xffff0000 	#get keystroke input
-	beq $t9, 1, GetKeyPressed	#make sure a key was clicked'
+	jal VerifyPress
 	li $t8 0
 	lw $t0, displayAddress
 	
@@ -167,23 +165,26 @@ VerifyP3:
 	blt $t3 $t4 BounceDown
 	ble $t3 $s3 BounceUp
 	j BounceDown
-	
+
+VerifyPress:
+	lw $t9 0xffff0000 	#get keystroke input
+	beq $t9, 1, GetKeyPressed	#make sure a key was clicked'
+	jr $ra
+
 GetKeyPressed:
 	lw $a0 0xffff0004	#load that key value
-	j MovePicker
+	jal MovePicker
 
 MovePicker:
 	beq $a0 'j', MoveDoodleLeft
 	beq $a0 'k', MoveDoodleRight
-	beq $t8 0 BounceDown
-	b BounceUp
+	jr $ra
 	
 MoveDoodleRight:
 	add $sp $sp -4
 	add $t3 $t3 24
 	
-	beq $t8 0 BounceDown
-	b BounceUp
+	jr $ra
 
 MoveDoodleLeft:
 	
