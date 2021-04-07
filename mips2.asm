@@ -144,7 +144,7 @@ BounceDown:
 	j BounceDown
 
 VerifyLocation:
-	bgt $t3 $t6 Exit
+	bgt $t3 $t6 DrawLoss
 	j VerifyPlatform
 	
 VerifyPlatform:
@@ -225,4 +225,35 @@ DrawDoodle:
 	addi $s2 $s2 132
 	sw $s1, ($s2)
 	jr $ra
-Exit:
+	
+	
+DrawLoss:
+	lw $t0, displayAddress
+	jal DrawScreen
+	li $s1 0x10008738
+	li $s2 0x00ff00
+	sw $s2, ($s1)
+	add $s1 $s1 128
+	sw $s2, ($s1)
+	add $s1 $s1 128
+	sw $s2, ($s1)
+	add $s1 $s1 128
+	sw $s2, ($s1)
+	add $s1 $s1 128
+	sw $s2, ($s1)
+	add $s1 $s1 128
+	sw $s2, ($s1)
+	add $s1 $s1 128
+	sw $s2, ($s1)
+	add $s1 $s1 128
+	sw $s2, ($s1)
+	add $s1 $s1 4
+	sw $s2, ($s1)
+	add $s1 $s1 4
+	sw $s2, ($s1)
+	add $s1 $s1 4
+	sw $s2, ($s1)
+	add $s1 $s1 4
+	sw $s2, ($s1)
+	li $v0 10 #End Game
+	syscall
