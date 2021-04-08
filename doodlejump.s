@@ -26,7 +26,7 @@
 #####################################################################
 .data
 	displayAddress:	.word	0x10008000
-	PlatformCurrent:  .word   0x10008C04, 0x10008898, 0x100084C8, 0x10008198  #Platform cords
+	PlatformCurrent:  .word   0x10008C84, 0x10008898, 0x100084C8, 0x10008198  #Platform cords
 	DoddleLocation: .word 	  0x10008B84
 	Music: .word 40, 55, 100, 10, 110, 20, 45, 37, 38, 11, 40
 .text
@@ -375,6 +375,7 @@ VerifyLocation:
 	
 VerifyPlatform:
 	lw $t4 0($t7) #Start of platform 1
+	sub $t4 $t4 128
 	li $s3 36
 	add $s3 $s3 $t4 #End of platform 1
 	li $t5 0
@@ -385,6 +386,7 @@ VerifyPlatform:
 
 VerifyP2:
 	lw $t4 4($t7) #Start of platform 1
+	sub $t4 $t4 128
 	li $s3 36
 	add $s3 $s3 $t4 #End of platform 1
 	li $t5 0
@@ -395,6 +397,7 @@ VerifyP2:
 
 VerifyP3:
 	lw $t4 8($t7) #Start of platform 1
+	sub $t4 $t4 128
 	li $s3 36
 	add $s3 $s3 $t4 #End of platform 1
 	li $t5 0
@@ -404,6 +407,7 @@ VerifyP3:
 
 VerifyP4:
 	lw $t4 12($t7) #Start of platform 1
+	sub $t4 $t4 128
 	li $s3 36
 	add $s3 $s3 $t4 #End of platform 1
 	li $t5 0
