@@ -9,8 +9,8 @@
 #
 .data
 	displayAddress:	.word	0x10008000
-	PlatformCurrent:  .word   0x10008D04, 0x10008898, 0x10008548  #Platform cords
-	DoddleLocation: .word 	  0x10008524
+	PlatformCurrent:  .word   0x10008C04, 0x10008898, 0x100084C8, 0x10008198  #Platform cords
+	DoddleLocation: .word 	  0x10008B84
 .text
 	lw $t0, displayAddress	# $t0 stores the base address for display
 	li $t1, 0xff0000	# $t1 stores the red colour code
@@ -44,6 +44,12 @@ InitialStart:
 	sw $t4 ($sp)
 	jal DrawPlatform
 	
+	lw $t4 12($t7)
+	add $t5 $t4 36
+	add $sp $sp -4
+	sw $t4 ($sp)
+	jal DrawPlatform
+	
 	add $sp $sp -4
 	sw $t3 ($sp) #Pushing Doodle
 	add $sp $sp -4
@@ -58,7 +64,7 @@ InitialStart:
 
 StartBounceUp:
 	lw $t0, displayAddress #screen initial
-	li $t1 0 
+	li $t1 0
 	add $t1 $t3 -1408  #where doddle would be if he jump
 	ble $t1 $t0 MovePlatforms 
 	j BounceUp
@@ -76,6 +82,7 @@ MovePlatforms:
 	
 	lw $t4 ($t7)
 	add $t4 $t4 1024
+	add $t4 $t4 8
 	
 	jal CheckBellow #Cheeck below, if yes update its location
 	
@@ -111,6 +118,19 @@ MovePlatforms:
 	sw $t4 ($sp)
 	jal DrawPlatform
 	
+	
+	lw $t4 12($t7)
+	add $t4 $t4 1024
+	add $t4 $t4 8
+	
+	jal CheckBellow #Cheeck below, if yes update its location
+	
+	
+	sw $t4 12($t7)
+	add $t5 $t4 36
+	add $sp $sp -4
+	sw $t4 ($sp)
+	jal DrawPlatform
 	
 	j BounceUp
 	
@@ -155,6 +175,12 @@ BounceUp:
 	jal DrawPlatform
 	
 	lw $t4 8($t7)
+	add $t5 $t4 36
+	add $sp $sp -4
+	sw $t4 ($sp)
+	jal DrawPlatform
+	
+	lw $t4 12($t7)
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
@@ -205,10 +231,17 @@ BounceDown:
 	sw $t4 ($sp)
 	jal DrawPlatform
 	
+	lw $t4 12($t7)
+	add $t5 $t4 36
+	add $sp $sp -4
+	sw $t4 ($sp)
+	jal DrawPlatform
+	
 	add $sp $sp -4
 	sw $t3 ($sp) #Pushing Doodle
 	add $sp $sp -4
 	sw $s4 ($sp) #Pushing colour
+	
 	jal DrawDoodle
 	jal VerifyLocation
 	j BounceDown
@@ -231,9 +264,17 @@ VerifyP2:
 	blt $t3 $t4 VerifyP3
 	ble $t3 $s3 StartBounceUp
 VerifyP3:
-	lw $t4 8($t7) #Start of platform 2
+	lw $t4 8($t7) #Start of platform 3
 	li $s3 36
-	add $s3 $s3 $t4 #End of platform 2
+	add $s3 $s3 $t4 #End of platform 3
+	blt $t3 $t4 VerifyP4
+	ble $t3 $s3 StartBounceUp
+	j BounceDown
+
+VerifyP4:
+	lw $t4 12($t7) #Start of platform 4
+	li $s3 36
+	add $s3 $s3 $t4 #End of platform 4
 	blt $t3 $t4 BounceDown
 	ble $t3 $s3 StartBounceUp
 	j BounceDown
