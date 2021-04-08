@@ -14,7 +14,7 @@
 	Music: .word 40, 55, 100, 10, 110, 20, 45, 37, 38, 11, 40
 .text
 	lw $t0, displayAddress	# $t0 stores the base address for display
-	li $t1, 0xff0000	# $t1 stores the red colour code
+	li $t1, 0x00FFFFFF	# $t1 stores the red colour code
 	li $t2, 0x00ff00	# $t2 stores the green colour code
 	lw $t3 DoddleLocation
 	li $s4 0x0000ff	# $t4 stores the blue colour code
@@ -31,24 +31,28 @@ InitialStart:
 	jal DrawScreen
 	add $sp $sp -4
 	sw $t4 ($sp)	#Pushing location
+	li $t2, 0x00ff00
 	jal DrawPlatform
 
 	lw $t4 4($t7)
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
+	li $t2, 0x00ff00
 	jal DrawPlatform
 	
 	lw $t4 8($t7)
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
+	li $t2, 0x00ff00
 	jal DrawPlatform
 	
 	lw $t4 12($t7)
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
+	li $t2, 0x00FFFF00
 	jal DrawPlatform
 	
 	add $sp $sp -4
@@ -170,6 +174,7 @@ MovePlatforms:
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
+	li $t2, 0x00ff00
 	jal DrawPlatform
 	
 
@@ -182,6 +187,7 @@ MovePlatforms:
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
+	li $t2, 0x00ff00
 	jal DrawPlatform
 	
 	
@@ -194,12 +200,13 @@ MovePlatforms:
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
+	li $t2, 0x00ff00
 	jal DrawPlatform
 	
 	
 	lw $t4 12($t7)
 	add $t4 $t4 1024
-	sub $t4 $t4 8
+	sub $t4 $t4 24
 	
 	jal CheckBellow #Cheeck below, if yes update its location
 	
@@ -208,6 +215,7 @@ MovePlatforms:
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
+	li $t2, 0x00FFFF00
 	jal DrawPlatform
 	
 	j BounceUp
@@ -247,24 +255,28 @@ BounceUp:
 	lw $t4 ($t7)
 	add $sp $sp -4
 	sw $t4 ($sp)	#Pushing location
+	li $t2, 0x00ff00
 	jal DrawPlatform
 
 	lw $t4 4($t7)
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
+	li $t2, 0x00ff00
 	jal DrawPlatform
 	
 	lw $t4 8($t7)
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
+	li $t2, 0x00ff00
 	jal DrawPlatform
 	
 	lw $t4 12($t7)
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
+	li $t2, 0x00FFFF00
 	jal DrawPlatform
 	
 	add $sp $sp -4
@@ -300,12 +312,14 @@ BounceDown:
 	lw $t4 ($t7)
 	add $sp $sp -4
 	sw $t4 ($sp)	#Pushing location
+	li $t2, 0x00ff00
 	jal DrawPlatform
 
 	lw $t4 4($t7)
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
+	li $t2, 0x00ff00
 	jal DrawPlatform
 	
 	lw $t4 8($t7)
@@ -318,6 +332,7 @@ BounceDown:
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
+	li $t2, 0x00FFFF00
 	jal DrawPlatform
 	
 	add $sp $sp -4
@@ -337,28 +352,38 @@ VerifyPlatform:
 	lw $t4 0($t7) #Start of platform 1
 	li $s3 36
 	add $s3 $s3 $t4 #End of platform 1
-	blt $t3 $t4 VerifyP2 #goto platform 2 if its smaller of if its equal
+	li $t5 0
+	add $t5 $t3 8 #right side of my doodle
+	blt $t5 $t4 VerifyP2  #goto platform 2 if its smaller of if its equal
 	ble $t3 $s3 StartBounceUp
-	
+
+
 VerifyP2:
-	lw $t4 4($t7) #Start of platform 2
+	lw $t4 4($t7) #Start of platform 1
 	li $s3 36
-	add $s3 $s3 $t4 #End of platform 2
-	blt $t3 $t4 VerifyP3
+	add $s3 $s3 $t4 #End of platform 1
+	li $t5 0
+	add $t5 $t3 8 #right side of my doodle
+	blt $t5 $t4 VerifyP3  #goto platform 2 if its smaller of if its equal
 	ble $t3 $s3 StartBounceUp
+
+
 VerifyP3:
-	lw $t4 8($t7) #Start of platform 3
+	lw $t4 8($t7) #Start of platform 1
 	li $s3 36
-	add $s3 $s3 $t4 #End of platform 3
-	blt $t3 $t4 VerifyP4
+	add $s3 $s3 $t4 #End of platform 1
+	li $t5 0
+	add $t5 $t3 8 #right side of my doodle
+	blt $t5 $t4 VerifyP4  #goto platform 2 if its smaller of if its equal
 	ble $t3 $s3 StartBounceUp
-	j BounceDown
 
 VerifyP4:
-	lw $t4 12($t7) #Start of platform 4
+	lw $t4 12($t7) #Start of platform 1
 	li $s3 36
-	add $s3 $s3 $t4 #End of platform 4
-	blt $t3 $t4 BounceDown
+	add $s3 $s3 $t4 #End of platform 1
+	li $t5 0
+	add $t5 $t3 8 #right side of my doodle
+	blt $t5 $t4 BounceDown  #goto platform 2 if its smaller of if its equal
 	ble $t3 $s3 StartBounceUp
 	j BounceDown
 	
@@ -389,7 +414,7 @@ MoveDoodleLeft:
 	
 
 DrawScreen: #Draw entire screen red
-	li $t1, 0xff0000
+	li $t1, 0x00FFFFFF
 	bge  $t0 $t6, Return
 	sw $t1, 0($t0)	 # paint unit red. 
 	addi $t0 $t0, 4
