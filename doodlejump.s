@@ -4,7 +4,7 @@
 # University of Toronto Mississauga
 #
 # Group members:
-# - Student 1: Amjad Hassoun, 1005949155
+# - Student 1: Amjad Hassoun, 
 # - Student 2 Majed Akram Majed Abed Moosa
 #
 # Bitmap Display Configuration:
