@@ -52,7 +52,7 @@ InitialStart:
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
-	li $t2, 0x00FFFF00
+	li $t2, 0x00FF7F7F
 	jal DrawPlatform
 	
 	add $sp $sp -4
@@ -68,6 +68,14 @@ InitialStart:
 
 
 StartBounceUp:
+	lw $t4 12($t7)
+	sub $t4 $t4 24
+	sw $t4 12($t7)
+	add $t5 $t4 36
+	add $sp $sp -4
+	sw $t4 ($sp)
+	li $t2, 0x00FF7F7F
+	jal DrawPlatform
 	lw $t0, displayAddress #screen initial
 	li $t1 0
 	add $t1 $t3 -1408  #where doddle would be if he jump
@@ -215,7 +223,7 @@ MovePlatforms:
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
-	li $t2, 0x00FFFF00
+	li $t2, 0x00FF7F7F
 	jal DrawPlatform
 	
 	j BounceUp
@@ -276,7 +284,7 @@ BounceUp:
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
-	li $t2, 0x00FFFF00
+	li $t2, 0x00FF7F7F
 	jal DrawPlatform
 	
 	add $sp $sp -4
@@ -332,7 +340,7 @@ BounceDown:
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
-	li $t2, 0x00FFFF00
+	li $t2, 0x00FF7F7F
 	jal DrawPlatform
 	
 	add $sp $sp -4
