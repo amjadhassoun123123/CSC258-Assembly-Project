@@ -82,7 +82,6 @@ MovePlatforms:
 	
 	lw $t4 ($t7)
 	add $t4 $t4 1024
-	add $t4 $t4 8
 	
 	jal CheckBellow #Cheeck below, if yes update its location
 	
@@ -121,7 +120,7 @@ MovePlatforms:
 	
 	lw $t4 12($t7)
 	add $t4 $t4 1024
-	add $t4 $t4 8
+	sub $t4 $t4 8
 	
 	jal CheckBellow #Cheeck below, if yes update its location
 	
