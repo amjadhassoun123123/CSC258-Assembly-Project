@@ -11,6 +11,7 @@
 	displayAddress:	.word	0x10008000
 	PlatformCurrent:  .word   0x10008C04, 0x10008898, 0x100084C8, 0x10008198  #Platform cords
 	DoddleLocation: .word 	  0x10008B84
+	Music: .word 40, 55, 100, 10, 110, 20, 45, 37, 38, 11, 40
 .text
 	lw $t0, displayAddress	# $t0 stores the base address for display
 	li $t1, 0xff0000	# $t1 stores the red colour code
@@ -68,7 +69,88 @@ StartBounceUp:
 	add $t1 $t3 -1408  #where doddle would be if he jump
 	ble $t1 $t0 MovePlatforms 
 	j BounceUp
+	
+MakeMusic:
+	li $a1 100
+	li $a0 60
+	li $a3 100
+	li $v0 31
+	
+	la $s1 Music
+	beq $t8 0 Music1
+	beq $t8 1 Music2
+	beq $t8 2 Music3
+	beq $t8 3 Music4
+	beq $t8 4 Music5
+	beq $t8 5 Music6
+	beq $t8 6 Music7
+	beq $t8 7 Music8
+	beq $t8 8 Music9
+	beq $t8 9 Music10
+	jr $ra
 
+Music1:
+	li $a0 30
+	la $a2 ($s1)
+	syscall
+	li $a0 50
+	la $a2 ($s1)
+	syscall
+	li $a0 12
+	la $a2 ($s1)
+	syscall
+	jr $ra
+	
+Music2:
+	li $a0 40
+	la $a2 4($s1)
+	syscall
+	jr $ra
+
+Music3:
+	li $a0 70
+	la $a2 8($s1)
+	syscall
+	jr $ra
+	
+Music4:
+	li $a0 55
+	la $a2 12($s1)
+	syscall
+	jr $ra
+
+Music5:
+	li $a0 10
+	la $a2 16($s1)
+	syscall
+	jr $ra
+Music6:
+	li $a0 72
+	la $a2 20($s1)
+	syscall
+	jr $ra
+
+Music7:
+	li $a0 12
+	la $a2 24($s1)
+	syscall
+	jr $ra
+Music8:
+	la $a2 28($s1)
+	syscall
+	jr $ra
+
+Music9:
+	la $a2 32($s1)
+	syscall
+	jr $ra
+Music10:
+	la $a2 36($s1)
+	syscall
+	jr $ra
+
+	
+	
 MovePlatforms:
 	jal DrawScreen
 	
@@ -82,19 +164,17 @@ MovePlatforms:
 	
 	lw $t4 ($t7)
 	add $t4 $t4 1024
-	
 	jal CheckBellow #Cheeck below, if yes update its location
-	
+
 	sw $t4 ($t7)
 	add $t5 $t4 36
 	add $sp $sp -4
 	sw $t4 ($sp)
 	jal DrawPlatform
-
+	
 
 	lw $t4 4($t7)
 	add $t4 $t4 1024
-	
 	jal CheckBellow #Cheeck below, if yes update its location
 	
 	
@@ -107,7 +187,6 @@ MovePlatforms:
 	
 	lw $t4 8($t7)
 	add $t4 $t4 1024
-	
 	jal CheckBellow #Cheeck below, if yes update its location
 	
 	
@@ -132,7 +211,8 @@ MovePlatforms:
 	jal DrawPlatform
 	
 	j BounceUp
-	
+
+
 CheckBellow:
 	li $t6 0x10009000 #screen size
 	bgt $t4 $t6 ResetPlatform #if its greater, reset it otherwise continue
@@ -144,6 +224,8 @@ ResetPlatform:
 	jr $ra
 
 BounceUp:
+	jal MakeMusic
+	li $t1 1
 	li $s1 1
 	jal VerifyPress
 	beq $t8 10 BounceDown
@@ -196,6 +278,8 @@ BounceUp:
 	
 
 BounceDown:
+	jal MakeMusic
+	li $t1 0
 	li $s1 0
 	jal VerifyPress
 	li $t8 0
@@ -316,6 +400,7 @@ DrawPlatform:
 	lw $s1 ($sp)
 	addi $sp $sp 4
 	addi $s2 $s1 36
+	
 	
 reDraw:	
 	bge $s1, $s2, Return
