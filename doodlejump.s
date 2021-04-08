@@ -1,4 +1,11 @@
-# Demo for painting
+#####################################################################
+#
+# CSC258H5S Winter 2021 Assembly Programming Project
+# University of Toronto Mississauga
+#
+# Group members:
+# - Student 1: Amjad Hassoun, 1005949155
+# - Student 2 Majed Akram Majed Abed Moosa
 #
 # Bitmap Display Configuration:
 # - Unit width in pixels: 8					     
@@ -7,6 +14,16 @@
 # - Display height in pixels: 256
 # - Base Address for Display: 0x10008000 ($gp)
 #
+# Which milestone is reached in this submission?
+# (See the assignment handout for descriptions of the milestones)
+# - Milestone 1/2/3/[4]/5 (choose the one the applies)
+#
+# Which approved additional features have been implemented?
+# (See the assignment handout for the list of additional features)
+# 1. I added music in the background
+# 2. I also added a moving platform (the red one), that moves by a couple units everytime you hit a platform
+#
+#####################################################################
 .data
 	displayAddress:	.word	0x10008000
 	PlatformCurrent:  .word   0x10008C04, 0x10008898, 0x100084C8, 0x10008198  #Platform cords
